@@ -14,11 +14,12 @@
 class Table {
 
 public:
+	string formatedString;
+	vector <string> convertedTable;
+
 	Table();
 	Table ToTable(const Lines& csv_lines);
 	virtual ~Table();
-	string formatedString;
-	vector <string> convertedTable;
 	int strlen_utf8 (const string& str);
 	void printTable ();
 };

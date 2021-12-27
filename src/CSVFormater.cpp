@@ -25,6 +25,5 @@ int main() {
 	formatedTable = formatedTable.ToTable(linesToBeConverted);
 	formatedTable.printTable();
 
-
 	return 0;
 }

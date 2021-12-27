@@ -8,14 +8,13 @@
 #include "Lines.h"
 
 Lines::Lines(string fileName) {
-	// TODO Auto-generated constructor stub
 
 	this->fileName = fileName;
 
 }
 
 Lines::~Lines() {
-	// TODO Auto-generated destructor stub
+	table.clear();
 }
 
 void Lines::buildTable (){
@@ -27,52 +26,61 @@ void Lines::buildTable (){
 	fstream file (fileName);
 	bool firstLine = true;
 
-	if(file.is_open())
+	try
 	{
-		while(getline(file, line))
+		if(file.is_open())
 		{
-			row.clear();
-			stringstream str(line);
-			if (firstLine)
+			while(getline(file, line))
 			{
-				while(getline(str, word, ';'))
+				row.clear();
+				stringstream str(line);
+				if (firstLine)
 				{
-					wordSize.push_back(strlen_utf8(word));
-					row.push_back(word);
-				}
-				firstLine = false;
-			}
-			else
-			{
-				wordSizeVecInd = 0;
-
-				while(getline(str, word, ';'))
-				{
-					if (strlen_utf8(word) > wordSize[wordSizeVecInd])
+					while(getline(str, word, ';'))
 					{
-						wordSize[wordSizeVecInd] = strlen_utf8(word);
+						wordSize.push_back(strlen_utf8(word));
+						row.push_back(word);
 					}
-					wordSizeVecInd++;
-					row.push_back(word);
+					firstLine = false;
+				}
+				else
+				{
+					wordSizeVecInd = 0;
+
+					while(getline(str, word, ';'))
+					{
+						if (strlen_utf8(word) > wordSize[wordSizeVecInd])
+						{
+							wordSize[wordSizeVecInd] = strlen_utf8(word);
+						}
+						wordSizeVecInd++;
+						row.push_back(word);
+					}
+
 				}
 
+				table.push_back(row);
 			}
 
-			table.push_back(row);
-		}
+			for(int i=0; i<wordSize.size(); i++)
+			{
+				lastLine.push_back(to_string(wordSize[i]));
+			}
 
-		for(int i=0; i<wordSize.size(); i++)
+			table.push_back(lastLine);
+
+			file.close();
+		}
+		else
 		{
-			lastLine.push_back(to_string(wordSize[i]));
+			cout<<"The file could not be opened.\n";
 		}
-
-		table.push_back(lastLine);
-
-		file.close();
 	}
-	else
+	catch (exception &e)
 	{
-		cout<<"The file could not be opened.\n";
+		cout << "\nThe Program has stopped due to the following exception: " << e.what() << "\n";
+		cout << "File: " << __FILE__ << "\n" << "Line: " << __LINE__ << "\n";
+		file.close();
 	}
 }
 

@@ -19,6 +19,8 @@ public:
 	virtual ~Table();
 	string formatedString;
 	vector <string> convertedTable;
+	int strlen_utf8 (const string& str);
+	void printTable ();
 };
 
 #endif /* TABLE_H_ */

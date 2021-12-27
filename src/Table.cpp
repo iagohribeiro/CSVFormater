@@ -17,7 +17,7 @@ Table::~Table() {
 }
 
 Table Table::ToTable(const Lines& csv_lines){
-	Table newTableClass;
+	Table newTableObject;
 
 	vector<int> wordSize;
 	for (string element:csv_lines.table[csv_lines.table.size()-1])
@@ -36,14 +36,13 @@ Table Table::ToTable(const Lines& csv_lines){
 				string lineFormat;
 				for(int j=0; j<csv_lines.table[i].size(); j++)
 				{
-					int difference =  wordSize[j] - csv_lines.table[i][j].size();
+					int difference =  wordSize[j] - strlen_utf8(csv_lines.table[i][j]);
+
 					if (difference != 0)
 					{
 						format += csv_lines.table[i][j];
-						//format.append((difference-1) - format.length(), ' ').append("|");
-						//lineFormat.append((wordSize[j] - 1) - lineFormat.length(), '-').append("+");
 						size_t length = format.length();
-						format.insert(length, wordSize[j] - csv_lines.table[i][j].size(), ' ');
+						format.insert(length, wordSize[j] - strlen_utf8(csv_lines.table[i][j]), ' ');
 						format.append("|");
 
 						size_t lengthLineFormat = lineFormat.length();
@@ -57,8 +56,8 @@ Table Table::ToTable(const Lines& csv_lines){
 					}
 
 				}
-				newTableClass.convertedTable.push_back(lineFormat);
-				newTableClass.convertedTable.push_back(format);
+				newTableObject.convertedTable.push_back(lineFormat);
+				newTableObject.convertedTable.push_back(format);
 
 			}
 			else
@@ -66,16 +65,12 @@ Table Table::ToTable(const Lines& csv_lines){
 				string format;
 				for(int j=0; j<csv_lines.table[i].size(); j++)
 				{
-					int difference =  wordSize[j] - csv_lines.table[i][j].size();
+					int difference =  wordSize[j] - strlen_utf8(csv_lines.table[i][j]);
 					if (difference != 0)
 					{
 						format += csv_lines.table[i][j];
-						//format.append((difference-1) - format.length(), ' ').append("|");
 						size_t length = format.length();
-						//cout<<"tamanho da palavra: "+ to_string(wordSize[j]) + "\n";
-						//cout<<"tamanho da string: "+ to_string(length)+"\n";
-
-						format.insert(length, wordSize[j] - csv_lines.table[i][j].size(), ' ');
+						format.insert(length, wordSize[j] - strlen_utf8(csv_lines.table[i][j]), ' ');
 						format.append("|");
 					}
 					else
@@ -85,18 +80,35 @@ Table Table::ToTable(const Lines& csv_lines){
 					}
 
 				}
-				//cout<<"String formatada: "+ format+"\n";
-				newTableClass.convertedTable.push_back(format);
+				newTableObject.convertedTable.push_back(format);
 
 			}
 		}
 
 	}
-	cout << "\n";
-	for (int i = 0; i<newTableClass.convertedTable.size(); i++)
-	{
-		cout << newTableClass.convertedTable[i] +"\n";
-	}
+	cout << "Test: " + to_string(strlen_utf8("50123 Köln")) + "\n";
+	return newTableObject;
+}
 
-	return newTableClass;
+void Table::printTable ()
+{
+	cout << "\n";
+	for (int i = 0; i<convertedTable.size(); i++)
+	{
+		cout << convertedTable[i] + "\n";
+	}
+}
+
+int Table:: strlen_utf8(const string& string)
+{
+	int length = 0;
+
+	for (char character:string)
+	{
+		if ((character & 0xC0) != 0x80)
+		{
+			++length;
+		}
+	}
+	return length;
 }

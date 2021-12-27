@@ -22,8 +22,9 @@ int main() {
 	const Lines linesToBeConverted = lines;
 
 	Table formatedTable;
-
 	formatedTable = formatedTable.ToTable(linesToBeConverted);
+	formatedTable.printTable();
+
 
 	return 0;
 }

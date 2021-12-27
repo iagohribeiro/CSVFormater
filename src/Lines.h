@@ -23,6 +23,7 @@ public:
 	Lines(string fileName);
 	virtual ~Lines();
 	void buildTable ();
+	int strlen_utf8 (const string& str);
 };
 
 #endif /* LINES_H_ */

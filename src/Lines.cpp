@@ -19,6 +19,10 @@ Lines::~Lines() {
 
 void Lines::buildTable (){
 
+	/**
+	 * @brief Builds a table from data read from a CSV file
+	 */
+
 	vector<string> row, lastLine;
 	vector<int> wordSize;
 	int wordSizeVecInd = 0;
@@ -36,6 +40,10 @@ void Lines::buildTable (){
 				stringstream str(line);
 				if (firstLine)
 				{
+					/**
+					 * @note considers ";" as the separator of the CSV data
+					 */
+
 					while(getline(str, word, ';'))
 					{
 						wordSize.push_back(strlen_utf8(word));
@@ -51,6 +59,11 @@ void Lines::buildTable (){
 					{
 						if (strlen_utf8(word) > wordSize[wordSizeVecInd])
 						{
+							/**
+							 * @note Checks the word size and stores the largest
+							 * size in the word size array.
+							 */
+
 							wordSize[wordSizeVecInd] = strlen_utf8(word);
 						}
 						wordSizeVecInd++;
@@ -66,6 +79,12 @@ void Lines::buildTable (){
 			{
 				lastLine.push_back(to_string(wordSize[i]));
 			}
+
+			/**
+			 * @note Adds the word size array as the last row of the table.
+			 * This row will be used later to find out which is the largest
+			 * word in a column.
+			 */
 
 			table.push_back(lastLine);
 
@@ -84,8 +103,15 @@ void Lines::buildTable (){
 	}
 }
 
-int Lines:: strlen_utf8(const string& string)
+int Lines::strlen_utf8(const string& string)
 {
+	/**
+	 * @brief Counts the character number in UTF8.
+	 * This function helps to disregard the bytes "wrongly"
+	 * counted by the length and size functions when the
+	 * string has special characters.
+	 */
+
 	int length = 0;
 
 	for (char character:string)
